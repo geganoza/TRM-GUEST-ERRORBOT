@@ -7,9 +7,9 @@ A public, no-login AI endpoint that helps a user identify and understand a boile
 ## Base URL
 
 ```
-BASE_URL = https://<filled-on-deploy>.up.railway.app
+BASE_URL = https://trm-guest-errorbot-production.up.railway.app
 ```
-> The permanent production URL is filled in here the moment the service deploys. It never changes after that. No headers, no token needed. Build against a `BASE_URL` constant and you set it exactly once.
+> This is the permanent production URL. It never changes. No headers, no token needed. Build against a `BASE_URL` constant and you set it exactly once.
 
 ## Endpoint: `POST {BASE_URL}/message`
 

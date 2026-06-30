@@ -12,8 +12,8 @@ const collect = () => { const out: string[] = []; return { out, onToken: (t: str
 describe("runGuestTurn", () => {
   it("calls a tool then streams the final answer", async () => {
     const { llm } = scriptedLLM([
-      { stopReason: "tool_use", text: "", toolCalls: [{ id: "1", name: "getErrorCodeSeries", args: { slug: "go-bf" } }], rawAssistant: [] },
-      { stopReason: "end", text: "E-01 ნიშნავს ანთების პრობლემას.", toolCalls: [], rawAssistant: [] },
+      { stopReason: "tool_use", text: "", toolCalls: [{ id: "1", name: "getErrorCodeSeries", args: { slug: "go-bf" } }], rawAssistant: { role: "assistant", content: null } },
+      { stopReason: "end", text: "E-01 ნიშნავს ანთების პრობლემას.", toolCalls: [], rawAssistant: { role: "assistant", content: "E-01 ნიშნავს ანთების პრობლემას." } },
     ]);
     const executed: string[] = [];
     const c = collect();
@@ -27,7 +27,7 @@ describe("runGuestTurn", () => {
     expect(c.out.join("")).toBe(final);
   });
   it("streams an immediate answer when no tool is needed (off-topic refusal)", async () => {
-    const { llm } = scriptedLLM([{ stopReason: "end", text: "აქ მხოლოდ შეცდომის კოდებში დაგეხმარებით.", toolCalls: [], rawAssistant: [] }]);
+    const { llm } = scriptedLLM([{ stopReason: "end", text: "აქ მხოლოდ შეცდომის კოდებში დაგეხმარებით.", toolCalls: [], rawAssistant: { role: "assistant", content: "აქ მხოლოდ შეცდომის კოდებში დაგეხმარებით." } }]);
     const c = collect();
     const final = await runGuestTurn({ messages: [{ role: "user", content: "ფასი?" }], llm, tools: [], execute: async () => ({}), onToken: c.onToken });
     expect(final).toContain("შეცდომის კოდებში");

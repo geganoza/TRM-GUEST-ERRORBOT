@@ -35,15 +35,13 @@ export async function runGuestTurn(args: {
     const res = await args.llm.chat({ system: GUEST_SYSTEM_PROMPT, messages: convo, tools: useTools ? args.tools : [], maxTokens });
     if (!useTools || res.stopReason !== "tool_use") { final = res.text; break; }
 
-    convo.push({ role: "assistant", content: res.rawAssistant });
-    const results = [];
+    convo.push(res.rawAssistant);
     for (const tc of res.toolCalls) {
       let content: string;
       try { content = JSON.stringify(await args.execute(tc.name, tc.args)); }
       catch (e) { content = JSON.stringify({ error: e instanceof Error ? e.message : "failed" }); }
-      results.push({ type: "tool_result", tool_use_id: tc.id, content });
+      convo.push({ role: "tool", tool_call_id: tc.id, content });
     }
-    convo.push({ role: "user", content: results });
   }
 
   for (const chunk of chunkText(final)) args.onToken(chunk);

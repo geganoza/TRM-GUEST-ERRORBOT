@@ -3,7 +3,7 @@ import { z } from "zod";
 const EnvSchema = z.object({
   PORT: z.coerce.number().default(8080),
   LLM_API_KEY: z.string().min(1),
-  LLM_MODEL: z.string().default("claude-sonnet-4-6"),
+  LLM_MODEL: z.string().default("gpt-4o"),
   ERROR_API_BASE_URL: z.string().url().default("https://trm-app-back-production.up.railway.app"),
   ALLOWED_ORIGINS: z.string().default(""),
   RATE_MAX: z.coerce.number().default(20),
